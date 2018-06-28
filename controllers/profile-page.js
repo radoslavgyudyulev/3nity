@@ -1,6 +1,8 @@
-const DoctorSchema = require('../models/Doctor')
+const DoctorSchema = require('../models/Diseases')
 
 module.exports = (req, res) => {
-    DoctorSchema.find({})
+    const counter = JSON.parse(req.query.counter)
+    
+    DoctorSchema.find({}).limit(counter)
     .then(response => res.json(response))
 }

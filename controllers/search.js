@@ -1,17 +1,20 @@
-const Doctor = require('../models/Doctor')
+const Doctor = require('../models/Diseases');
 
 module.exports = (req, res) => {
+    
 const search = req.query.search
-console.log(search)
+const counter = JSON.parse(req.query.count)
 
 let query = Doctor.find({})
 
 if (search) {
-    query = query.where('personalProfile.specialty').regex(new RegExp(search, 'i'))
+    query = query.where('грс').regex(new RegExp(search, 'i'))
 }
-    query             
+    query     
         .sort('-createdAt')
-        .then(users => {
-            res.json(users)                 
-            })   
+        .limit(counter) 
+        query.exec((err, users) => {
+            if(err => console.log('err ' + err))
+            res.json(users)
+        })
 }

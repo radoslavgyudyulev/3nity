@@ -8,6 +8,8 @@ const config = require('./config/config')
 const controllers = require('./controllers')
 const logger = require('morgan')
 
+const Diseases2 = require('./models/Diseases2')
+
 // Middleware 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static('public'));
@@ -23,8 +25,21 @@ app.listen(config.PORT, () => {
 // MongoDB Connection
 require('./config/database')(config)
 
+const Diseases = require('./models/Diseases')
 // Routes
-app.get('/api/profile', controllers.profilePage)
-app.post('/api/create', controllers.createPage)
-app.get('/api/profile/:userId', controllers.singleProfile)
-app.get('/api/search', controllers.search)
+app.get('/api', (req, res) => {
+    Diseases.find({})
+    .then(response => res.json(response))
+    
+})
+
+app.get('/api/profile/:userId', (req,res) => {
+    const reqId = req.params.userId
+    Diseases2.find({_id: reqId})
+      .then(response => res.json(response))
+      .catch(err => console.log(err))
+})
+
+app.get('/api/diseases', (req,res) => {
+    Diseases2.find({}).then(response => res.json(response))
+})
